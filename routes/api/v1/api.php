@@ -14,6 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['namespace' => 'Auth'], function () {
+    Route::post('/login', ['uses' => 'AuthController@login']);
+    Route::post('/register', ['uses' => 'AuthController@register']);
+});
+
+Route::group(['middleware' => 'auth:api'], function () {
+    Route::get('/rates', ['uses' => 'CurrencyExchangeApiController@rates']);
+    Route::post('/convert', ['uses' => 'CurrencyExchangeApiController@convert']);
 });
